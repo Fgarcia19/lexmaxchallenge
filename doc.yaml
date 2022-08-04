@@ -1,0 +1,180 @@
+openapi: 3.0.1
+info:
+  title: API Lexmax Challenge
+  description: Esta api se desarrollo con el proposito de superar el "backend challenge" de Lexmax para el manejo de una tabla de una base de 
+  version: 1.0.0
+
+servers:
+- url: localhost:5000/people
+
+tags:
+- name: people
+  description: Maneja la informacion con la tabla "people" de la base de datos.
+paths:
+  /:
+    post:
+      tags:
+      - people
+      summary: Inserta una nueva persona a la tabla de la base de datos.
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BodypeoplePost'
+        required: true
+      responses:
+        200:
+          description: La informacion del cliente se guardo correctamente
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+    
+  /{idPerson}:
+    get:
+      tags:
+      - people
+      summary: Extraer de la base de datos un persona.
+      parameters:
+      - name: idPerson
+        in: path
+        description: Identificador del persona a obtener
+        required: true
+        schema:
+          type: string
+        
+      responses:
+        200:
+          description: La informacion del cliente se obtuvo correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExitopeopleGet'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+  
+  /{idPersonUpdate}:
+    put:
+      tags:
+      - people
+      summary: Actualiza la informacion de una persona en la base de datos.
+      parameters:
+      - name: idPersonUpdate
+        in: path
+        description: Identificador del cliente a obtener
+        required: true
+        schema:
+          type: string
+          
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BodypeoplePost'
+        
+      responses:
+        200:
+          description: Se actualizo correctamente
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /{idPersonDelete}:
+    delete:
+      tags:
+        - people
+      summary: Elimina logicamente a un cliente.
+      parameters:
+      - name: idPersonDelete
+        in: path
+        description: Identificador del cliente a obtener
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Se elimino correctamente
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+  
+components:
+  responses:
+    NotFound:
+      description: No se encontro 
+    
+    BadRequest:
+      description: Los datos enviados son incorrectos o hay datos obligatorios no enviados
+      
+    ServerError:
+      description: Error en servidor
+        
+    
+
+  schemas:
+
+    BodypeoplePost:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la persona
+        lastname:
+          type: string
+          description: Apellido de la persona
+        email:
+          type: string
+          description: Correo de la persona
+        address:
+          type: string
+          description: Direccion de la persona
+        reference_address:
+          type: string
+          description: Referencia de la direccion de la persona
+        phone_number:
+          type: string
+          description: Numero de la persona
+      required:
+        - name
+        - lastname
+        - email  
+          
+    ExitopeopleGet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID de la persona
+        name:
+          type: string
+          description: Nombre de la persona
+        lastname:
+          type: string
+          description: Apellido de la persona
+        email:
+          type: string
+          description: Correo de la persona
+        address:
+          type: string
+          description: Direccion de la persona
+        reference_address:
+          type: string
+          description: Referencia de la direccion de la persona
+        phone_number:
+          type: string
+          description: Numero de la persona
+          
+          
